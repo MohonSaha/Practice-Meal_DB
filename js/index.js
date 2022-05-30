@@ -6,35 +6,48 @@ const searchFood = () => {
 
     //========================= DATA CLEAR ==============================
     searchField.value = ' ';
+    if(searchText == ''){
+        // please enter some value 
+    }
     // console.log(searchText);
 
+    else {
     //========================= LOAD DATA ================================
     const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`
     fetch(url)
     .then(res => res.json())
     .then(data => displaySearchResult(data.meals));
+    }
+
 }
 
 const displaySearchResult = meals => {
     const searchResult = document.getElementById("Search-Result");
     searchResult.textContent = '';
     // console.log(searchResult);
-    meals.forEach(meal => {
-        console.log(meal);
-        const div = document.createElement("div");
-        div.classList.add("col");
-        div.innerHTML = ` 
-            <div onClick = "loadMealDetails(${meal.idMeal})" class="card h-100">
-                 <img height= "300px" src="${meal.strMealThumb}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">${meal.strMeal}</h5>
-                    <p class="card-text">${meal.strInstructions.slice(0,200)}</p>
-                </div>
-            </div>
-        `;
-    searchResult.appendChild(div);
 
-    });
+    if (meals.length == 0){
+        // show no result found 
+    }
+    else{
+        meals.forEach(meal => {
+            console.log(meal);
+            const div = document.createElement("div");
+            div.classList.add("col");
+            div.innerHTML = ` 
+                <div onClick = "loadMealDetails(${meal.idMeal})" class="card h-100">
+                     <img height= "300px" src="${meal.strMealThumb}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${meal.strMeal}</h5>
+                        <p class="card-text">${meal.strInstructions.slice(0,200)}</p>
+                    </div>
+                </div>
+            `;
+        searchResult.appendChild(div);
+    
+        });
+    }
+   
 }
 
 const loadMealDetails = mealId => {
